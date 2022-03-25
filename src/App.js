@@ -5,6 +5,7 @@ import Login from "./components/Login";
 import Header from "./Header";
 import Footer from "./Footer";
 import BookDelivery from "./components/BookDelivery";
+import Deliveries from "./components/Deliveries";
 
 const App = () => {
   return (
@@ -13,6 +14,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/bookdel" element={<BookDelivery />} />
+        <Route path="/yourdel" element={<Deliveries />} />
       </Routes>
       <Footer />
     </div>

@@ -92,7 +92,7 @@ const ResponsiveAppBar = () => {
             LOGO
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
+            {/* {pages.map((page) => (
               <Button
                 key={page}
                 onClick={handleCloseNavMenu}
@@ -101,7 +101,21 @@ const ResponsiveAppBar = () => {
               >
                 {page}
               </Button>
-            ))}
+            ))} */}
+            <Button
+              onClick={handleCloseNavMenu}
+              sx={{ my: 2, color: "white", display: "block" }}
+              href="/bookdel"
+            >
+              Send a product
+            </Button>
+            <Button
+              onClick={handleCloseNavMenu}
+              sx={{ my: 2, color: "white", display: "block" }}
+              href="/yourdel"
+            >
+              Your Deliveries
+            </Button>
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
