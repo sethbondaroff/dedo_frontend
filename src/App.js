@@ -6,6 +6,8 @@ import Header from "./Header";
 import Footer from "./Footer";
 import BookDelivery from "./components/BookDelivery";
 import Deliveries from "./components/Deliveries";
+import { Paper } from "@mui/material";
+import solution from "./images/solution.png";
 
 const App = () => {
   return (

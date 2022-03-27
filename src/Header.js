@@ -116,6 +116,13 @@ const ResponsiveAppBar = () => {
             >
               Your Deliveries
             </Button>
+            <Button
+              onClick={handleCloseNavMenu}
+              sx={{ my: 2, color: "white", display: "block" }}
+              href="/"
+            >
+              Notifications
+            </Button>
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
