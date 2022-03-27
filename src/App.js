@@ -8,6 +8,8 @@ import BookDelivery from "./components/BookDelivery";
 import Deliveries from "./components/Deliveries";
 import { Paper } from "@mui/material";
 import solution from "./images/solution.png";
+import Login from "./components/Login";
+import Signup from "./components/Signup";
 
 const App = () => {
   return (
@@ -17,6 +19,7 @@ const App = () => {
         <Route path="/" element={<Login />} />
         <Route path="/bookdel" element={<BookDelivery />} />
         <Route path="/yourdel" element={<Deliveries />} />
+        <Route path="/signup" element={<Signup />} />
       </Routes>
       <Footer />
     </div>
