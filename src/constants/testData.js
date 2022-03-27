@@ -9,7 +9,7 @@ const testData = {
     },
     driver3: {
         userName: 'Bob',
-        coordinates: [44.65107, -63.582]
+        coordinates: [44.65107, -63.532]
     }
 }
 export default testData

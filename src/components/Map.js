@@ -1,9 +1,24 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import 'leaflet/dist/leaflet.css'
-import {MapContainer, TileLayer, Marker} from 'react-leaflet'
-import testData from '../constants/testData'
+import {MapContainer, TileLayer, Marker, Popup} from 'react-leaflet'
+import L from 'leaflet'
 
-const Map = ({height = '300px', width = '500px', latLong = [44.65107, -63.582687]}) => {
+import icon from 'leaflet/dist/images/marker-icon.png';
+import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+
+let DefaultIcon = L.icon({
+    iconUrl: icon,
+    shadowUrl: iconShadow
+});
+
+L.Marker.prototype.options.icon = DefaultIcon;
+
+const Map = ({
+        height = '300px', 
+        width = '500px', 
+        userLatLong = [44.65107, -63.582687],
+        nearbyDrivers = {}
+    }) => {
 
     const mapStyles = {
         height: height,
@@ -12,17 +27,28 @@ const Map = ({height = '300px', width = '500px', latLong = [44.65107, -63.582687
 
     const [drivers, setDrivers] = useState([])
 
-    for(key in testData){
-        
-    }
+    useEffect(() => {
+        const markers = []
+        for(const key in nearbyDrivers){
+            markers.push(
+                <Marker position={nearbyDrivers[key].coordinates}>
+                    <Popup>
+                        {nearbyDrivers[key].userName}
+                    </Popup>
+                </Marker>
+            )
+        }
+        setDrivers(markers)
+    }, [nearbyDrivers])
 
     return(
         <div style={mapStyles}>
-            <MapContainer center={latLong} zoom={13}>
+            <MapContainer center={userLatLong} zoom={13}>
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
+                {drivers}
             </MapContainer>
         </div>
     )
