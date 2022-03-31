@@ -8,7 +8,7 @@ const Signup = () => {
   const routeChange = () => {
     if (validateForm()) {
       axios
-        .post(`${Constants.API_URL}/v1/signup/`, {
+        .post(`${Constants.API_URL}/v1/signup`, {
           first_name: first_name,
           last_name: last_name,
           email: email,

@@ -10,7 +10,7 @@ const Login = () => {
 
   const routeChange = () => {
     axios
-      .post(`${Constants.API_URL}/v1/login/`, {
+      .post(`${Constants.API_URL}/v1/login`, {
         username: username,
         password: password,
       })
