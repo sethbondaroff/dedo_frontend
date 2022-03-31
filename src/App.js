@@ -6,7 +6,6 @@ import {
 } from 'react-router-dom'
 import Login from './components/Login'
 import Map from './components/Map'
-import testData from './constants/testData'
 
 const App = () => {
   return (
@@ -14,9 +13,7 @@ const App = () => {
       <Routes>
         <Route path='/' element={<Login/>}/>
         <Route path='/map-test' element={
-          <Map
-            nearbyDrivers={testData}
-          />
+          <Map/>
         }/>
       </Routes>
     </div>
