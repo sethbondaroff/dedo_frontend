@@ -1,7 +1,6 @@
 import { React } from "react";
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
-import Login from "./components/Login";
 import Header from "./Header";
 import Footer from "./Footer";
 import BookDelivery from "./components/BookDelivery";
@@ -10,6 +9,7 @@ import { Paper } from "@mui/material";
 import solution from "./images/solution.png";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
+import Driver from "./components/Driver";
 
 const App = () => {
   return (
@@ -20,8 +20,9 @@ const App = () => {
         <Route path="/bookdel" element={<BookDelivery />} />
         <Route path="/yourdel" element={<Deliveries />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/driver" element={<Driver />} />
       </Routes>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };
