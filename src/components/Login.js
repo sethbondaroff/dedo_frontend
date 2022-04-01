@@ -1,26 +1,36 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/Login.css";
 import { useNavigate } from "react-router-dom";
 import { TextField, Grid, Button, Typography, Link } from "@mui/material";
-import * as Constants from "../config/constants";
+import { API } from "../apis/api";
+import { getUserProfile, setUserLoggedIn, setUserProfile } from "../helpers/authHelpers";
+import { API_URL } from "../config/constants";
 const axios = require("axios");
 
 const Login = () => {
   const navigate = useNavigate();
+  const [user, setUser] = useState(getUserProfile());
 
-  const routeChange = () => {
-    axios
-      .post(`${Constants.API_URL}/v1/login`, {
+  useEffect(() => {
+    if (user) {
+        navigate("/profile");
+    }
+  }, []);
+  const routeChange = async () => {
+    try {
+      let response = await API.post(`${API_URL}/v1/login`, {
         username: username,
         password: password,
-      })
-      .then(function (response) {
-        console.log("success");
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
       });
+
+      setUserLoggedIn(response.data.access, response.data.refresh);
+      response = await API.get(`${API_URL}/v1/user`);
+      console.log(response?.data)
+      setUserProfile(JSON.stringify(response?.data));
+      navigate("/profile");
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const [username, setUsername] = useState("");
@@ -37,14 +47,14 @@ const Login = () => {
     <form className="login-container">
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <Typography variant="h5">Login</Typography>
+          <Typography variant="h4">Login</Typography>
           <br />
           <br />
         </Grid>
         <Grid item xs={12}>
           <TextField
             id="username"
-            variant="outlined"
+            variant="standard"
             label="Username"
             value={username}
             onChange={(e) => allowAlphanumeric(e)}
@@ -54,8 +64,8 @@ const Login = () => {
         </Grid>
         <Grid item xs={12}>
           <TextField
-            type={"password"}
-            variant="outlined"
+            type="password"
+            variant="standard"
             label="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}

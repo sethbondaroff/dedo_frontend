@@ -11,9 +11,11 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
+import { Link } from "react-router-dom";
+import { setUserLoggedOut } from "./helpers/authHelpers";
 
 const pages = ["Send a product", "Your deliveries", "Blog"];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const settings = ["Profile", "Dashboard", "Logout"];
 
 const ResponsiveAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -140,11 +142,18 @@ const ResponsiveAppBar = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
+              <MenuItem key="Profile" onClick={handleCloseUserMenu}>
+                <Typography textAlign="center">
+                  <Link to="/profile">Profile</Link>
+                </Typography>
+              </MenuItem>
+              <MenuItem key="Logout" onClick={handleCloseUserMenu}>
+                <Typography textAlign="center">
+                  <Link to="/" onClick={() => setUserLoggedOut()}>
+                    Logout
+                  </Link>
+                </Typography>
+              </MenuItem>
             </Menu>
           </Box>
         </Toolbar>
