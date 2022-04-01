@@ -3,7 +3,11 @@ import "../styles/Login.css";
 import { useNavigate } from "react-router-dom";
 import { TextField, Grid, Button, Typography, Link } from "@mui/material";
 import { API } from "../apis/api";
-import { getUserProfile, setUserLoggedIn, setUserProfile } from "../helpers/authHelpers";
+import {
+  getUserProfile,
+  setUserLoggedIn,
+  setUserProfile,
+} from "../helpers/authHelpers";
 import { API_URL } from "../config/constants";
 const axios = require("axios");
 
@@ -13,7 +17,7 @@ const Login = () => {
 
   useEffect(() => {
     if (user) {
-        navigate("/profile");
+      navigate("/profile");
     }
   }, []);
   const routeChange = async () => {
@@ -25,7 +29,7 @@ const Login = () => {
 
       setUserLoggedIn(response.data.access, response.data.refresh);
       response = await API.get(`${API_URL}/v1/user`);
-      console.log(response?.data)
+      console.log(response?.data);
       setUserProfile(JSON.stringify(response?.data));
       navigate("/profile");
     } catch (err) {

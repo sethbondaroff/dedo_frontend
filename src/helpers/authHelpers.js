@@ -36,5 +36,5 @@ export {
   getAccessToken,
   getRefreshToken,
   setUserProfile,
-  getUserProfile
+  getUserProfile,
 };
