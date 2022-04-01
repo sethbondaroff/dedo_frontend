@@ -85,7 +85,7 @@ const Login = () => {
             color="primary"
             onClick={routeChange}
           >
-            REGISTER
+            LOGIN
           </Button>
         </Grid>
         <Grid item xs={6}></Grid>
