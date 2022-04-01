@@ -15,8 +15,10 @@ const Login = () => {
         password: password,
       })
       .then(function (response) {
+        localStorage.setItem("user1", JSON.stringify(response));
         console.log("success");
         console.log(response);
+        navigate("/bookdel");
       })
       .catch(function (error) {
         console.log(error);
@@ -71,7 +73,7 @@ const Login = () => {
             color="primary"
             onClick={routeChange}
           >
-            REGISTER
+            LOGIN
           </Button>
         </Grid>
         <Grid item xs={6}></Grid>
