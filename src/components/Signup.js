@@ -1,28 +1,37 @@
 import React, { useState } from "react";
 import "../styles/Signup.css";
-import { TextField, Grid, Button, Typography, Link } from "@mui/material";
-import * as Constants from "../config/constants";
-const axios = require("axios");
+import {
+  TextField,
+  Grid,
+  Button,
+  Typography,
+  Link,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+} from "@mui/material";
+import { API } from "../apis/api";
+import { API_URL } from "../config/constants";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
-  const routeChange = () => {
+  const navigate = useNavigate();
+  const routeChange = async () => {
     if (validateForm()) {
-      axios
-        .post(`${Constants.API_URL}/v1/signup`, {
+      try {
+        let response = await API.post(`${API_URL}/v1/signup`, {
           first_name: first_name,
           last_name: last_name,
           email: email,
           username: username,
           password1: password,
           password2: confirm_password,
-        })
-        .then(function (response) {
-          console.log("success");
-          console.log(response);
-        })
-        .catch(function (error) {
-          console.log(error);
+          type: type,
         });
+        navigate("/login");
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
 
@@ -32,17 +41,9 @@ const Signup = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirm_password, setConfirmPassword] = useState("");
+  const [type, setType] = useState("CUSTOMER");
 
   function validateForm() {
-    let error_msg = "Following fields are required!\n\n";
-
-    if (first_name === "") error_msg += "• First Name\n";
-    if (last_name === "") error_msg += "• Last Name\n";
-    if (email === "") error_msg += "• Email\n";
-    if (username === "") error_msg += "• Username\n";
-    if (password === "") error_msg += "• Password\n";
-    if (confirm_password === "") error_msg += "• Confirm Password\n";
-
     if (
       !first_name ||
       !last_name ||
@@ -51,22 +52,23 @@ const Signup = () => {
       !password ||
       !confirm_password
     )
-      alert(error_msg);
+      alert("All fields are required!");
     else {
       let email_validator =
         /^[a-zA-Z0-9\-_]+@[a-zA-Z0-9]+(\.[A-Za-z]{2,3}){1,2}$/gi;
 
-      error_msg = "";
-
-      if (!email.match(email_validator)) error_msg += "• Email is invalid.\n";
-      if (password.length < 8)
-        error_msg += "• Password must be at least 8 character long.\n";
-      if (password !== confirm_password)
-        error_msg += "• Password and Confirm Password does not match.\n";
-      if (error_msg.length === 0) return true;
-      else {
-        error_msg = "Following validation(s) failed!\n\n" + error_msg;
-        alert(error_msg);
+      if (email.match(email_validator)) {
+        if (password.length > 7) {
+          if (password === confirm_password) {
+            return true;
+          } else {
+            alert("Password and Confirm Password does not match.");
+          }
+        } else {
+          alert("Password must have atleast 8 characters");
+        }
+      } else {
+        alert("Invalid email!");
       }
     }
     return false;
@@ -92,14 +94,14 @@ const Signup = () => {
     <form className="signup-container">
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <Typography variant="h5">Signup</Typography>
+          <Typography variant="h4">Signup</Typography>
           <br />
           <br />
         </Grid>
         <Grid item xs={6}>
           <TextField
             id="first_name"
-            variant="outlined"
+            variant="standard"
             label="First Name"
             value={first_name}
             onChange={(e) => allowOnlyLetters(e)}
@@ -110,7 +112,7 @@ const Signup = () => {
         <Grid item xs={6}>
           <TextField
             id="last_name"
-            variant="outlined"
+            variant="standard"
             label="Last Name"
             value={last_name}
             onChange={(e) => allowOnlyLetters(e)}
@@ -121,7 +123,7 @@ const Signup = () => {
         <Grid item xs={12}>
           <TextField
             type="email"
-            variant="outlined"
+            variant="standard"
             label="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -132,7 +134,7 @@ const Signup = () => {
         <Grid item xs={12}>
           <TextField
             id="username"
-            variant="outlined"
+            variant="standard"
             label="Username"
             value={username}
             onChange={(e) => allowAlphanumeric(e)}
@@ -143,7 +145,7 @@ const Signup = () => {
         <Grid item xs={12}>
           <TextField
             type="password"
-            variant="outlined"
+            variant="standard"
             label="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -154,13 +156,33 @@ const Signup = () => {
         <Grid item xs={12}>
           <TextField
             type={"password"}
-            variant="outlined"
+            variant="standard"
             label="Confirm Password"
             value={confirm_password}
             onChange={(e) => setConfirmPassword(e.target.value)}
             required
             fullWidth
           ></TextField>
+        </Grid>
+        <Grid item xs={12}>
+          <RadioGroup
+            row
+            aria-labelledby="demo-row-radio-buttons-group-label"
+            name="row-radio-buttons-group"
+            value={type}
+            onChange={(e) => setType(e.target.value)}
+          >
+            <FormControlLabel
+              value="CUSTOMER"
+              control={<Radio />}
+              label="Customer"
+            />
+            <FormControlLabel
+              value="DRIVER"
+              control={<Radio />}
+              label="Driver"
+            />
+          </RadioGroup>
         </Grid>
         <Grid item xs={12}>
           <Button

@@ -11,6 +11,7 @@ import { Paper } from "@mui/material";
 import solution from "./images/solution.png";
 import Driver from "./components/Driver";
 import Refresh from "./components/Refresh";
+import Profile from "./components/Profile";
 
 const App = () => {
   return (
@@ -18,12 +19,14 @@ const App = () => {
       <Header />
       <Routes>
         <Route path="/" element={<Login />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/bookdel" element={<BookDelivery />} />
         <Route path="/yourdel" element={<Deliveries />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/driver" element={<Driver />} />
         <Route path="/refresh" element={<Refresh />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
       {/* <Footer /> */}
     </div>

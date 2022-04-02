@@ -14,31 +14,40 @@ function Deliveries() {
     headers: { Authorization: `Bearer ${token}` },
   };
 
+  var flag = 0;
+
   useEffect(() => {
+    const loadDeliveries = () => {
+      if (token !== null) {
+        axios
+          .get(`${Constants.API_URL}/v1/trips`, config)
+          .then((result) => {
+            console.log("h1l");
+            setDeliv(result);
+            flag = 1;
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      } else {
+        console.log("g1ls");
+      }
+    };
     loadDeliveries();
   }, []);
 
-  const loadDeliveries = () => {
-    if (token !== null) {
-      axios
-        .get(`${Constants.API_URL}/v1/trips`, config)
-        .then((result) => {
-          setDeliv(result);
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    }
-  };
+  if (deliveries.length <= 0) {
+    return <h1>LOADING</h1>;
+  }
 
-  console.log(deliveries.data.length);
+  console.log(deliveries);
 
   return deliveries.data.length > 0 ? (
     deliveries.data.map((delivery) => {
       return (
         <>
           <DeliveryElement
-            item_name="Aadhar Card"
+            item_name={delivery.item_type}
             source={delivery.source_user + " " + delivery.source_address}
             destination={
               delivery.destination_user + " " + delivery.destination_address

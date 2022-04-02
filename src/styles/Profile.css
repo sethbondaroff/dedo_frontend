@@ -1,0 +1,13 @@
+.profile-container {
+  padding: 1%;
+  width: 500px;
+  text-align: center;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #d5cafc;
+  -webkit-box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.54);
+  -moz-box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.54);
+  box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.54);
+}
