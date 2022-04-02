@@ -14,17 +14,28 @@ import * as Constants from "../config/constants";
 import { Dropdown, DropdownButton } from "react-bootstrap";
 import { Box } from "@mui/system";
 
-const token =
-  localStorage.getItem("user1") &&
-  JSON.parse(localStorage.getItem("user1")).data.access;
+const token = localStorage.getItem("access_token");
 
 console.log(token);
+
+const arr = [];
 
 const BookDelivery = () => {
   const config = {
     headers: { Authorization: `Bearer ${token}` },
   };
 
+  const [long, setLong] = useState("");
+  const [lat, setLat] = useState("");
+  var custid = "";
+  const setLocation = () => {
+    navigator.geolocation.getCurrentPosition(function (position) {
+      setLong(position.coords.longitude);
+      setLat(position.coords.latitude);
+      console.log("Latitude is :", lat);
+      console.log("Longitude is :", long);
+    });
+  };
   const data = {
     status: "REQUESTED",
     source_address: "1567 Robie Street, Halifax, Canada",
@@ -35,25 +46,24 @@ const BookDelivery = () => {
       coordinates: [-63.586518, 44.637895],
     },
     destination_email: "aadil@gmail.com",
+    destination_user: custid,
     item_type: type,
   };
 
-  const longRef = useRef("");
-  const latRef = useRef("");
-
-  const [long, setLong] = useState("");
-  const [lat, setLat] = useState("");
   var [type, setType] = useState("NONE");
 
   const handleSubmit = () => {
-    var long = document.getElementById("long").value;
+    //var long = document.getElementById("long").value;
     var lat = document.getElementById("lat").value;
     var type1 = document.getElementById("dropdown");
     console.log(type);
+    custid = document.getElementById("custid").value;
+    console.log(custid);
 
-    if (long !== "" && lat !== "" && type !== "NONE") {
+    if (lat !== "" && type !== "NONE" && custid !== "") {
       console.log(long);
       console.log(lat);
+      setLocation();
       axios
         .post(`${Constants.API_URL}/v1/trip`, data, config)
         .then((result) => {
@@ -82,19 +92,24 @@ const BookDelivery = () => {
       <div className="login-container">
         <Card sx={{ maxWidth: 400, margin: "auto", marginTop: "30px" }}>
           <CardContent>
-            <TextField
+            {/* <TextField
               id="long"
               label="required"
               helperText="Please enter Source Address"
               required={true}
-              ref={longRef}
-            />
+            /> */}
             <TextField
               id="lat"
               label="required"
               required={true}
               helperText="Please enter Destination Address"
-              ref={latRef}
+            />
+
+            <TextField
+              id="custid"
+              label="required"
+              required={true}
+              helperText="Please enter the Secret ID of your destination user"
             />
 
             <Box sx={{ p: 2 }}>

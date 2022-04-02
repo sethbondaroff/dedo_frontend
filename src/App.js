@@ -12,6 +12,7 @@ import solution from "./images/solution.png";
 import Driver from "./components/Driver";
 import Refresh from "./components/Refresh";
 import Profile from "./components/Profile";
+import SetCurrentLocation from "./components/SetCurrentLocation";
 
 const App = () => {
   return (
@@ -27,6 +28,7 @@ const App = () => {
         <Route path="/driver" element={<Driver />} />
         <Route path="/refresh" element={<Refresh />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/setcurrlocation" element={<SetCurrentLocation />} />
       </Routes>
       {/* <Footer /> */}
     </div>

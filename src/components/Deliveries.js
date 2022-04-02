@@ -4,7 +4,7 @@ import axios from "axios";
 import * as Constants from "../config/constants";
 import { Typography } from "@mui/material";
 
-const token = JSON.parse(localStorage.getItem("user1")).data.access;
+const token = localStorage.getItem("access_token");
 
 console.log(token);
 

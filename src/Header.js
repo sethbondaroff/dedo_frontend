@@ -126,6 +126,13 @@ const ResponsiveAppBar = () => {
             >
               Notifications
             </Button>
+            <Button
+              onClick={handleCloseNavMenu}
+              sx={{ my: 2, color: "white", display: "block" }}
+              href="/driver"
+            >
+              Your Deliveries (Driver)
+            </Button>
           </Box>
           {!showMenu && (
             <Button href="/login" variant="contained">

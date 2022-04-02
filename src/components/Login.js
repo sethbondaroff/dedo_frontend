@@ -30,17 +30,18 @@ const Login = () => {
           localStorage.setItem("user1", JSON.stringify(response));
           console.log("success");
           console.log(response);
+          setUserLoggedIn(response.data.access, response.data.refresh);
           //navigate("/bookdel");
         })
         .catch(function (error) {
           console.log(error);
         });
 
-      setUserLoggedIn(response.data.access, response.data.refresh);
       response = await API.get(`${API_URL}/v1/user`);
-      console.log(response?.data);
-      setUserProfile(JSON.stringify(response?.data));
-      navigate("/profile");
+
+      console.log(response.data);
+      setUserProfile(JSON.stringify(response.data));
+      // navigate("/profile");
     } catch (err) {
       console.log(err);
     }
