@@ -29,6 +29,8 @@ const Map = ({
         height = '500px', 
         width = '900px', 
         userLatLong = [0, 0],
+        setSourceCoords = (arr) => {},
+        setDestCoords = (arr) => {}
     }) => {
 
     const mapStyles = {
@@ -52,21 +54,31 @@ const Map = ({
         if(markerData.source.length !== 0){
             mapMarkers.push(
                 <Marker key='source' position={markerData.source.slice(0,2)}>
-                    <Popup>Source: {markerData.source[2]}</Popup>
+                    <Popup>
+                        <p><b>Source</b><br/> {markerData.source[2]}</p>
+                        <Button color='secondary' onClick={() => removeMarker('s')}>Delete</Button>
+                    </Popup>
                 </Marker>
             )
         }
         if(markerData.dest.length !== 0){
             mapMarkers.push(
                 <Marker key='dest' position={markerData.dest.slice(0,2)}>
-                    <Popup>Destination: {markerData.dest[2]}</Popup>
+                    <Popup>
+                        <p><b>Destination</b><br/> {markerData.dest[2]}</p>
+                        <Button color='secondary' onClick={() => removeMarker('d')}>Delete</Button>
+                    </Popup>
                 </Marker>
             )
         }
         if(markerData.center.length !== 0){
             mapMarkers.push(
                 <Marker key='center' icon={RedIcon} position={markerData.center.slice(0,2)}>
-                    <Popup>{markerData.center[2]}</Popup>
+                    <Popup>
+                        <p>{markerData.center[2]}</p>
+                        <Button onClick={() => updateMarkers('s')}>Set Source</Button>
+                        <Button onClick={() => updateMarkers('d')}>Set Destination</Button>
+                    </Popup>
                 </Marker>
             )
         }
@@ -96,18 +108,34 @@ const Map = ({
 
     const updateMarkers = (btn) => {
         if(btn === 's'){
+            setSourceCoords(markerData.center)
             setMarkerData(prevState => {
                 return {...prevState, center: [], source: prevState.center}
             })
         } else {
+            setDestCoords(markerData.center)
             setMarkerData(prevState => {
                 return {...prevState, center: [], dest: prevState.center}
             })
         }
     }
 
+    const removeMarker = (btn) => {
+        if(btn === 's'){
+            setSourceCoords([])
+            setMarkerData(prevState => {
+                return {...prevState, source: []}
+            })
+        } else {
+            setDestCoords([])
+            setMarkerData(prevState => {
+                return {...prevState, dest: []}
+            })
+        }
+    }
+
     return(
-        <div style={mapStyles}>
+        <div style={mapStyles} className='map-container'>
             <div className='map-controls'>
                 <TextField value={street} onChange={(e) => setStreet(e.target.value)} label='House number / Street'/>
                 <TextField value={city} onChange={(e) => setCity(e.target.value)} label='City'/>
