@@ -28,6 +28,8 @@ const setUserLoggedOut = () => {
   localStorage.removeItem(ACCESS_TOKEN_KEY);
   localStorage.removeItem(REFRESH_TOKEN_KEY);
   localStorage.removeItem(PROFILE);
+  localStorage.removeItem("source");
+  localStorage.removeItem("dest");
 };
 
 export {

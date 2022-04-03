@@ -31,7 +31,7 @@ const Login = () => {
           console.log("success");
           console.log(response);
           setUserLoggedIn(response.data.access, response.data.refresh);
-          //navigate("/bookdel");
+          navigate("/bookdel");
         })
         .catch(function (error) {
           console.log(error);

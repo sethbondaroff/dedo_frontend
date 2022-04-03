@@ -19,26 +19,33 @@ function SetCurrentLocation() {
       setLong(position.coords.longitude);
 
       setLat(position.coords.latitude);
-      arr.push(long);
-      arr.push(lat);
+
       console.log("Latitude is :", lat);
       console.log("Longitude is :", long);
     });
 
+    arr.push(parseFloat(long));
+    arr.push(parseFloat(lat));
     const data = {
       current_location: {
         type: "Point",
-        Coordiantes: arr,
+        Coordinates: arr,
       },
     };
     const config = {
       headers: { Authorization: `Bearer ${token}` },
     };
 
+    console.log(data);
+    console.log(config);
+
     axios
       .post(`${Constants.API_URL}/v1/current-location`, data, config)
       .then((response) => {
         console.log(response);
+      })
+      .catch((err) => {
+        console.error(err);
       });
 
     alert("Your location has been updated successfully");

@@ -13,6 +13,7 @@ import axios from "axios";
 import * as Constants from "../config/constants";
 import { Dropdown, DropdownButton } from "react-bootstrap";
 import { Box } from "@mui/system";
+import { useNavigate } from "react-router-dom";
 
 const token = localStorage.getItem("access_token");
 
@@ -25,51 +26,69 @@ const BookDelivery = () => {
     headers: { Authorization: `Bearer ${token}` },
   };
 
-  const [long, setLong] = useState("");
-  const [lat, setLat] = useState("");
+  const source = [];
+  const dest = [];
+  const src_arr = [];
+  const dest_arr = [];
+  var src_address = "";
+  var dest_address = "";
   var custid = "";
-  const setLocation = () => {
-    navigator.geolocation.getCurrentPosition(function (position) {
-      setLong(position.coords.longitude);
-      setLat(position.coords.latitude);
-      console.log("Latitude is :", lat);
-      console.log("Longitude is :", long);
-    });
-  };
-  const data = {
-    status: "REQUESTED",
-    source_address: "1567 Robie Street, Halifax, Canada",
-    destination_address: "5165, Hollis Street, Halifax, Canada",
-    source_location: { type: "Point", coordinates: [-63.586518, 44.637895] },
-    destination_location: {
-      type: "Point",
-      coordinates: [-63.586518, 44.637895],
-    },
-    destination_email: "aadil@gmail.com",
-    destination_user: custid,
-    item_type: type,
-  };
+  // const setLocation = () => {
+  //   navigator.geolocation.getCurrentPosition(function (position) {
+  //     setLong(position.coords.longitude);
+  //     setLat(position.coords.latitude);
+  //     console.log("Latitude is :", lat);
+  //     console.log("Longitude is :", long);
+  //   });
+  // };
 
   var [type, setType] = useState("NONE");
+  const navigator = useNavigate();
 
   const handleSubmit = () => {
     //var long = document.getElementById("long").value;
-    var lat = document.getElementById("lat").value;
+    source.push(localStorage.getItem("source"));
+    // source.push(localStorage.getItem("source")[1]);
+    dest.push(localStorage.getItem("dest"));
     var type1 = document.getElementById("dropdown");
     console.log(type);
     custid = document.getElementById("custid").value;
     console.log(custid);
 
-    if (lat !== "" && type !== "NONE" && custid !== "") {
-      console.log(long);
-      console.log(lat);
-      setLocation();
+    //console.log(source[0].split(",")[0]);
+    src_address = source[0].split(",")[2];
+    dest_address = dest[0].split(",")[2];
+    console.log(src_address);
+    src_arr.push(parseFloat(source[0].split(",")[0]));
+    src_arr.push(parseFloat(source[0].split(",")[1]));
+
+    dest_arr.push(parseFloat(dest[0].split(",")[0]));
+    dest_arr.push(parseFloat(dest[0].split(",")[1]));
+
+    var data = {
+      status: "REQUESTED",
+      source_address: src_address,
+      destination_address: dest_address,
+      source_location: { type: "Point", coordinates: src_arr },
+      destination_location: {
+        type: "Point",
+        coordinates: dest_arr,
+      },
+      destination_email: "aadil@gmail.com",
+      destination_user: parseInt(custid),
+      item_type: type + "",
+    };
+    console.log(data.item_type);
+
+    if (source !== null && dest !== null && type !== "NONE" && custid !== "") {
       axios
         .post(`${Constants.API_URL}/v1/trip`, data, config)
         .then((result) => {
           console.log(config);
           console.log(result);
           alert("Your trip has been created");
+          localStorage.removeItem("source");
+          localStorage.removeItem("dest");
         })
         .catch((err) => {
           console.log(config);
@@ -78,6 +97,10 @@ const BookDelivery = () => {
     } else {
       alert("Please fill out the required values");
     }
+  };
+
+  const handleMap = () => {
+    navigator("/map-test");
   };
 
   const handleChange = (e) => {
@@ -92,18 +115,49 @@ const BookDelivery = () => {
       <div className="login-container">
         <Card sx={{ maxWidth: 400, margin: "auto", marginTop: "30px" }}>
           <CardContent>
+            {localStorage.getItem("source") === null ? (
+              <Button
+                variant="contained"
+                color="primary"
+                size="small"
+                onClick={handleMap}
+              >
+                Search for source location.
+              </Button>
+            ) : (
+              <>
+                <Typography variant="h5">Source Address Selected!</Typography>
+                <Typography>
+                  {localStorage.getItem("source").substring(31)}
+                </Typography>
+              </>
+            )}
             {/* <TextField
-              id="long"
-              label="required"
-              helperText="Please enter Source Address"
-              required={true}
-            /> */}
-            <TextField
               id="lat"
               label="required"
               required={true}
               helperText="Please enter Destination Address"
-            />
+            /> */}
+
+            {localStorage.getItem("dest") === null ? (
+              <Button
+                variant="contained"
+                color="primary"
+                size="small"
+                onClick={handleMap}
+              >
+                Search for destination location.
+              </Button>
+            ) : (
+              <>
+                <Typography variant="h5">
+                  Destination Address Selected!
+                </Typography>
+                <Typography>
+                  {localStorage.getItem("dest").substring(35)}
+                </Typography>
+              </>
+            )}
 
             <TextField
               id="custid"
