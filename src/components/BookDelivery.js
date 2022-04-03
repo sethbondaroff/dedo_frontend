@@ -59,11 +59,11 @@ const BookDelivery = () => {
     src_address = source[0].split(",")[2];
     dest_address = dest[0].split(",")[2];
     console.log(src_address);
-    src_arr.push(parseFloat(source[0].split(",")[0]));
     src_arr.push(parseFloat(source[0].split(",")[1]));
+    src_arr.push(parseFloat(source[0].split(",")[0]));
 
-    dest_arr.push(parseFloat(dest[0].split(",")[0]));
     dest_arr.push(parseFloat(dest[0].split(",")[1]));
+    dest_arr.push(parseFloat(dest[0].split(",")[0]));
 
     var data = {
       status: "REQUESTED",
