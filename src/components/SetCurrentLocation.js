@@ -57,14 +57,14 @@ function SetCurrentLocation() {
   };
 
   return (
-    <Grid
-      container
-      spacing={0}
-      direction="column"
-      alignItems="center"
-      justifyContent="center"
-      style={{ minHeight: "100vh" }}
-    >
+    // <Grid
+    //   container
+    //   spacing={0}
+    //   direction="column"
+    //   alignItems="center"
+    //   justifyContent="center"
+    // >
+    <>
       <Typography
         color="black"
         variant="overline"
@@ -85,7 +85,8 @@ function SetCurrentLocation() {
       >
         Set My Current Location!
       </Button>
-    </Grid>
+    </>
+    // </Grid>
   );
 }
 

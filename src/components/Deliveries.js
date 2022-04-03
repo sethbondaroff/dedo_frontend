@@ -37,7 +37,7 @@ function Deliveries() {
   }, []);
 
   if (deliveries.length <= 0) {
-    return <h1>LOADING</h1>;
+    return <h1>No deliveries</h1>;
   }
 
   console.log(deliveries);

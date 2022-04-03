@@ -4,6 +4,7 @@ import {
   Card,
   CardContent,
   FormControl,
+  Grid,
   InputLabel,
   NativeSelect,
   TextField,
@@ -14,18 +15,18 @@ import * as Constants from "../config/constants";
 import { Dropdown, DropdownButton } from "react-bootstrap";
 import { Box } from "@mui/system";
 import { useNavigate } from "react-router-dom";
+import Map from "./Map";
 
 const token = localStorage.getItem("access_token");
 
 console.log(token);
 
 const arr = [];
+const config = {
+  headers: { Authorization: `Bearer ${token}` },
+};
 
 const BookDelivery = () => {
-  const config = {
-    headers: { Authorization: `Bearer ${token}` },
-  };
-
   const source = [];
   const dest = [];
   const src_arr = [];
@@ -44,6 +45,7 @@ const BookDelivery = () => {
 
   var [type, setType] = useState("NONE");
   const navigator = useNavigate();
+  const [res, setRes] = useState([]);
 
   const handleSubmit = () => {
     //var long = document.getElementById("long").value;
@@ -56,8 +58,10 @@ const BookDelivery = () => {
     console.log(custid);
 
     //console.log(source[0].split(",")[0]);
+
     src_address = source[0].split(",")[2];
     dest_address = dest[0].split(",")[2];
+
     console.log(src_address);
     src_arr.push(parseFloat(source[0].split(",")[1]));
     src_arr.push(parseFloat(source[0].split(",")[0]));
@@ -74,8 +78,7 @@ const BookDelivery = () => {
         type: "Point",
         coordinates: dest_arr,
       },
-      destination_email: "aadil@gmail.com",
-      destination_user: parseInt(custid),
+      destination_email: custid,
       item_type: type + "",
     };
     console.log(data.item_type);
@@ -86,7 +89,12 @@ const BookDelivery = () => {
         .then((result) => {
           console.log(config);
           console.log(result);
-          alert("Your trip has been created");
+          setRes(result);
+          assignDriver(result.data.id);
+
+          alert(
+            "Your trip has been created and is in a requested state. If a driver is close by, he will be assigned to you."
+          );
           localStorage.removeItem("source");
           localStorage.removeItem("dest");
         })
@@ -94,9 +102,23 @@ const BookDelivery = () => {
           console.log(config);
           console.log(err);
         });
+
+      //axios.post(`${Constants.API_URL}/v1/trip`, data, config);
     } else {
       alert("Please fill out the required values");
     }
+  };
+
+  const assignDriver = (id) => {
+    axios
+      .post(`${Constants.API_URL}/v1/trip/${id}`, "", config)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => {
+        console.error(err);
+        alert(err);
+      });
   };
 
   const handleMap = () => {
@@ -119,124 +141,141 @@ const BookDelivery = () => {
         Ready to send your parcel securely? Enter the details to get a secure
         delivery experience.
       </Typography>
-      <div className="login-container">
-        <Card sx={{ maxWidth: 400, margin: "auto", marginTop: "30px" }}>
-          <CardContent>
-            {localStorage.getItem("source") === null ? (
-              <Button
-                sx={{ m: 2 }}
-                variant="contained"
-                color="primary"
-                size="small"
-                onClick={handleMap}
-              >
-                Search for source location.
-              </Button>
-            ) : (
-              <>
-                <Typography variant="h5">Source Address Selected!</Typography>
-                <Typography>
-                  {localStorage.getItem("source").substring(31)}
-                </Typography>
-              </>
-            )}
-            {/* <TextField
+      <Grid
+        container
+        // spacing={0}
+        // direction="row"
+        // alignItems="center"
+        // justifyContent="center"
+        style={{ minHeight: "100vh" }}
+      >
+        <Grid
+          item
+          md={6}
+          // spacing={0}
+          // alignItems="center"
+          // justifyContent="center"
+          // style={{ minHeight: "80vh" }}
+        >
+          {/* <div className="login-container"> */}
+          <Card sx={{ maxWidth: 400, ml: 4, mt: 2, marginTop: "30px" }}>
+            <Grid container alignItems="center" justifyContent="center">
+              <CardContent>
+                {localStorage.getItem("source") === null ? (
+                  <Typography variant="h5" m={2}>
+                    Select From Address
+                  </Typography>
+                ) : (
+                  <>
+                    <Typography variant="h5" m={2}>
+                      Source Address Selected!
+                    </Typography>
+                    <Typography m={2}>
+                      {localStorage.getItem("source").split(",")[2]}
+                    </Typography>
+                  </>
+                )}
+                {/* <TextField
               id="lat"
               label="required"
               required={true}
               helperText="Please enter Destination Address"
             /> */}
 
-            {localStorage.getItem("dest") === null ? (
-              <Button
-                sx={{ m: 2 }}
-                variant="contained"
-                color="primary"
-                size="small"
-                onClick={handleMap}
-              >
-                Search for destination location.
-              </Button>
-            ) : (
-              <>
-                <Typography variant="h5">
-                  Destination Address Selected!
-                </Typography>
-                <Typography>
-                  {localStorage.getItem("dest").substring(35)}
-                </Typography>
-              </>
-            )}
+                {localStorage.getItem("dest") === null ? (
+                  <Typography variant="h5" m={2}>
+                    Select To Address
+                  </Typography>
+                ) : (
+                  <>
+                    <Typography variant="h5" m={2}>
+                      Destination Address Selected!
+                    </Typography>
+                    <Typography m={2}>
+                      {localStorage.getItem("dest").split(",")[2]}
+                    </Typography>
+                  </>
+                )}
 
-            <TextField
-              id="custid"
-              label="required"
-              required={true}
-              helperText="Please enter the Secret ID of your destination user"
-            />
+                <TextField
+                  id="custid"
+                  label="required"
+                  required={true}
+                  m={2}
+                  helperText="Please enter the Email of your destination user"
+                />
 
-            <Box sx={{ p: 2 }}>
-              <FormControl fullWidth>
-                <InputLabel variant="standard" htmlFor="uncontrolled-native">
-                  Type of document
-                </InputLabel>
-                <NativeSelect
-                  id="dropdown"
-                  defaultValue={"NONE"}
-                  inputProps={{
-                    name: "type",
-                    id: "uncontrolled-native",
-                  }}
-                  onChange={handleChange}
+                <Box sx={{ p: 2 }}>
+                  <FormControl fullWidth>
+                    <InputLabel
+                      variant="standard"
+                      htmlFor="uncontrolled-native"
+                    >
+                      Type of document
+                    </InputLabel>
+                    <NativeSelect
+                      id="dropdown"
+                      defaultValue={"NONE"}
+                      inputProps={{
+                        name: "type",
+                        id: "uncontrolled-native",
+                      }}
+                      onChange={handleChange}
+                    >
+                      <option
+                        value={"NONE"}
+                        onClick={() => {
+                          setType("NONE");
+                        }}
+                      >
+                        NONE
+                      </option>
+                      <option
+                        value={"DOCUMENT"}
+                        onClick={() => {
+                          setType("DOCUMENT");
+                          console.log(type);
+                        }}
+                      >
+                        DOCUMENT
+                      </option>
+                      <option
+                        value={"DRUG"}
+                        onClick={() => {
+                          setType("DRUG");
+                        }}
+                      >
+                        DRUG
+                      </option>
+                      <option
+                        value={"OTHERS"}
+                        onClick={() => {
+                          setType("OTHERS");
+                        }}
+                      >
+                        OTHERS
+                      </option>
+                    </NativeSelect>
+                  </FormControl>
+                </Box>
+
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="small"
+                  onClick={handleSubmit}
                 >
-                  <option
-                    value={"NONE"}
-                    onClick={() => {
-                      setType("NONE");
-                    }}
-                  >
-                    NONE
-                  </option>
-                  <option
-                    value={"DOOCUMENT"}
-                    onClick={() => {
-                      setType("DOCUMENT");
-                      console.log(type);
-                    }}
-                  >
-                    DOCUMENT
-                  </option>
-                  <option
-                    value={"DRUG"}
-                    onClick={() => {
-                      setType("DRUG");
-                    }}
-                  >
-                    DRUG
-                  </option>
-                  <option
-                    value={"OTHERS"}
-                    onClick={() => {
-                      setType("OTHERS");
-                    }}
-                  >
-                    OTHERS
-                  </option>
-                </NativeSelect>
-              </FormControl>
-            </Box>
-
-            <Button
-              variant="contained"
-              color="primary"
-              size="small"
-              onClick={handleSubmit}
-            >
-              Find a delivery driver
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
+                  Find a delivery driver
+                </Button>
+              </CardContent>
+            </Grid>
+          </Card>
+          {/* </div> */}
+        </Grid>
+        <Grid item md={5}>
+          <Map></Map>
+        </Grid>
+      </Grid>
     </>
   );
 };

@@ -23,8 +23,8 @@ let RedIcon = L.icon({
 L.Marker.prototype.options.icon = DefaultIcon;
 
 const Map = ({
-  height = "500px",
-  width = "900px",
+  height = "25em",
+  width = "100%",
   userLatLong = [0, 0],
   setSourceCoords = (arr) => {},
   setDestCoords = (arr) => {},
@@ -138,13 +138,23 @@ const Map = ({
       setMarkerData((prevState) => {
         return { ...prevState, center: [], source: prevState.center };
       });
-      localStorage.setItem("source", markerData.center);
+
+      localStorage.setItem(
+        "source",
+        JSON.parse(JSON.stringify(markerData.center))
+      );
+      window.location.reload(true);
     } else if (btn == "d") {
       setDestCoords(markerData.center);
       setMarkerData((prevState) => {
         return { ...prevState, center: [], dest: prevState.center };
       });
-      localStorage.setItem("dest", markerData.center);
+
+      localStorage.setItem(
+        "dest",
+        JSON.parse(JSON.stringify(markerData.center))
+      );
+      window.location.reload(true);
     } else {
       setDestCoords(markerData.center);
       setMarkerData((prevState) => {

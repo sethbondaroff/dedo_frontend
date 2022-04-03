@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import cx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
@@ -7,6 +7,8 @@ import AirplanemodeActive from "@material-ui/icons/AirplanemodeActive";
 import VerticalTicketRip from "@mui-treasury/components/rip/verticalTicket";
 import { useVerticalRipStyles } from "@mui-treasury/styles/rip/vertical";
 import { Button, Typography } from "@mui/material";
+import axios from "axios";
+import * as Constants from "../config/constants";
 
 const mainColor = "#003399";
 const lightColor = "#ecf2ff";
@@ -112,6 +114,38 @@ function Driver() {
     rightColor: lightColor,
     tearColor: mainColor,
   });
+  const token = localStorage.getItem("access_token");
+  const [deliveries, setDeliv] = useState([]);
+  const config = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
+  var flag = 0;
+  useEffect(() => {
+    const loadDeliveries = () => {
+      if (token !== null) {
+        axios
+          .get(`${Constants.API_URL}/v1/trips`, config)
+          .then((result) => {
+            console.log("h1l");
+            setDeliv(result);
+            flag = 1;
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      } else {
+        console.log("g1ls");
+      }
+    };
+    loadDeliveries();
+  }, []);
+
+  if (deliveries.length <= 0) {
+    return <h1>LOADING</h1>;
+  }
+
+  console.log(deliveries);
+
   return (
     <>
       <br></br>
@@ -151,10 +185,6 @@ function Driver() {
           </div>
         </div>
       </Card>
-      <br></br>
-      <Button size="small" color="primary" variant="contained">
-        Accept & Start Trip
-      </Button>
     </>
   );
 }
