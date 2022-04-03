@@ -117,7 +117,7 @@ const BookDelivery = () => {
       })
       .catch((err) => {
         console.error(err);
-        alert(err);
+        alert("No driver available");
       });
   };
 

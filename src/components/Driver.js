@@ -141,52 +141,66 @@ function Driver() {
   }, []);
 
   if (deliveries.length <= 0) {
-    return <h1>LOADING</h1>;
+    return <h1>No deliveries</h1>;
   }
 
   console.log(deliveries);
 
-  return (
-    <>
-      <br></br>
-      <Card className={styles.card} elevation={0}>
-        <div className={cx(styles.left, styles.moveLeft)}>
-          <Typography variant="h4">Passport</Typography>
-          <CardMedia
-            className={styles.media}
-            image={
-              //"https://dejpknyizje2n.cloudfront.net/marketplace/products/yin-yang-two-fighting-dragons-sticker-1538772130.3390164.png"
-              "https://cdn-icons-png.flaticon.com/512/160/160085.png"
-            }
-          />
-        </div>
-
-        <VerticalTicketRip
-          classes={{
-            ...ripStyles,
-            left: cx(ripStyles.left, styles.moveLeft),
-            right: cx(ripStyles.right, styles.moveRight),
-          }}
-        />
-        <div className={cx(styles.right, styles.moveRight)}>
-          <div className={styles.label}>
-            <h2 className={styles.heading}>1333 South Park St</h2>
-            <p className={styles.subheader}>Halifax</p>
-          </div>
-          <div className={styles.path}>
-            <div className={styles.line}>
-              <AirplanemodeActive className={styles.plane} />
+  return deliveries.data.length > 0 ? (
+    deliveries.data.map((delivery) => {
+      return (
+        <>
+          <br></br>
+          <Card className={styles.card} elevation={0}>
+            <div className={cx(styles.left, styles.moveLeft)}>
+              <Typography variant="h4">{delivery.item_type}</Typography>
+              <CardMedia
+                className={styles.media}
+                image={
+                  //"https://dejpknyizje2n.cloudfront.net/marketplace/products/yin-yang-two-fighting-dragons-sticker-1538772130.3390164.png"
+                  "https://cdn-icons-png.flaticon.com/512/160/160085.png"
+                }
+              />
             </div>
-            <span className={styles.flight}>Delivery</span>
-          </div>
-          <div className={styles.label}>
-            <h2 className={styles.heading}>1991 Brunswick St</h2>
-            <p className={styles.subheader}>Halifax</p>
-          </div>
-        </div>
-      </Card>
+
+            <VerticalTicketRip
+              classes={{
+                ...ripStyles,
+                left: cx(ripStyles.left, styles.moveLeft),
+                right: cx(ripStyles.right, styles.moveRight),
+              }}
+            />
+
+            <div className={cx(styles.right, styles.moveRight)}>
+              <div className={styles.label}>
+                <h2 className={styles.heading}>{delivery.source_address}</h2>
+                <p className={styles.subheader}>Halifax</p>
+              </div>
+              <div className={styles.path}>
+                <div className={styles.line}>
+                  <AirplanemodeActive className={styles.plane} />
+                </div>
+                <span className={styles.flight}>Delivery</span>
+              </div>
+              <div className={styles.label}>
+                <h2 className={styles.heading}>
+                  {delivery.destination_address}
+                </h2>
+                <p className={styles.subheader}>Halifax</p>
+              </div>
+            </div>
+          </Card>
+        </>
+      );
+    })
+  ) : (
+    <>
+      <Typography>No Deliveries</Typography>
     </>
   );
 }
 
 export default Driver;
+
+{
+}
