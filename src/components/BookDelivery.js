@@ -109,14 +109,22 @@ const BookDelivery = () => {
   return (
     <>
       {console.log(type)}
-      <Typography color="black" variant="h3">
-        Enter a location to send delivery
+      <Typography
+        color="black"
+        variant="overline"
+        display="block"
+        align="center"
+        mt={4}
+      >
+        Ready to send your parcel securely? Enter the details to get a secure
+        delivery experience.
       </Typography>
       <div className="login-container">
         <Card sx={{ maxWidth: 400, margin: "auto", marginTop: "30px" }}>
           <CardContent>
             {localStorage.getItem("source") === null ? (
               <Button
+                sx={{ m: 2 }}
                 variant="contained"
                 color="primary"
                 size="small"
@@ -141,6 +149,7 @@ const BookDelivery = () => {
 
             {localStorage.getItem("dest") === null ? (
               <Button
+                sx={{ m: 2 }}
                 variant="contained"
                 color="primary"
                 size="small"
