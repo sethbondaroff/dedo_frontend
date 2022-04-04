@@ -28,7 +28,8 @@ L.Marker.prototype.options.icon = DefaultIcon;
 const Map = ({
         height = '500px', 
         width = '900px', 
-        userLatLong = [0, 0],
+        userLatLong = [44.648618, -63.5859487],
+        defaultZoom = 13,
         setSourceCoords = (arr) => {},
         setDestCoords = (arr) => {}
     }) => {
@@ -39,7 +40,7 @@ const Map = ({
     }
 
     const [center, setCenter] = useState(userLatLong)
-    const [zoomLevel, setZoomLevel] = useState(1)
+    const [zoomLevel, setZoomLevel] = useState(defaultZoom)
 
     const [street, setStreet] = useState('')
     const [city, setCity] = useState('')
@@ -108,6 +109,7 @@ const Map = ({
 
     const updateMarkers = (btn) => {
         if(btn === 's'){
+            console.log(markerData.center)
             setSourceCoords(markerData.center)
             setMarkerData(prevState => {
                 return {...prevState, center: [], source: prevState.center}
