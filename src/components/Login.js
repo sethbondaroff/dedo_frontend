@@ -13,11 +13,11 @@ const axios = require("axios");
 
 const Login = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState(getUserProfile());
+  const [user, setUser] = useState(JSON.parse(getUserProfile()));
 
   useEffect(() => {
     if (user) {
-      navigate("/profile");
+      user?.type == "CUSTOMER" ? navigate("/bookdel") : navigate("/driver");
     }
   }, []);
   const routeChange = async () => {
@@ -31,7 +31,6 @@ const Login = () => {
           console.log("success");
           console.log(response);
           setUserLoggedIn(response.data.access, response.data.refresh);
-          navigate("/bookdel");
         })
         .catch(function (error) {
           console.log(error);
@@ -41,7 +40,8 @@ const Login = () => {
 
       console.log(response.data);
       setUserProfile(JSON.stringify(response.data));
-      // navigate("/profile");
+      setUser(getUserProfile());
+      user?.type == "CUSTOMER" ? navigate("/bookdel") : navigate("/driver");
     } catch (err) {
       console.log(err);
     }
@@ -58,52 +58,52 @@ const Login = () => {
   }
 
   return (
-    <form className="login-container">
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
+    <>
+      <form className="login-container">
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
           <Typography variant="h4">Login</Typography>
-          <br />
-          <br />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              id="username"
+              variant="standard"
+              label="Username"
+              value={username}
+              onChange={(e) => allowAlphanumeric(e)}
+              required
+              fullWidth
+            ></TextField>
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              type="password"
+              variant="standard"
+              label="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              fullWidth
+            ></TextField>
+          </Grid>
+          <Grid item xs={12}>
+            <Button
+              fullWidth
+              size="large"
+              variant="outlined"
+              color="primary"
+              onClick={routeChange}
+            >
+              LOGIN
+            </Button>
+          </Grid>
+          <Grid item xs={6}></Grid>
+          <Grid item xs={6}>
+            <Link href="/signup">{"Don't have an account? Sign Up"}</Link>
+          </Grid>
         </Grid>
-        <Grid item xs={12}>
-          <TextField
-            id="username"
-            variant="standard"
-            label="Username"
-            value={username}
-            onChange={(e) => allowAlphanumeric(e)}
-            required
-            fullWidth
-          ></TextField>
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            type="password"
-            variant="standard"
-            label="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            fullWidth
-          ></TextField>
-        </Grid>
-        <Grid item xs={12}>
-          <Button
-            fullWidth
-            size="large"
-            variant="outlined"
-            color="primary"
-            onClick={routeChange}
-          >
-            LOGIN
-          </Button>
-        </Grid>
-        <Grid item xs={6}></Grid>
-        <Grid item xs={6}>
-          <Link href="/signup">{"Don't have an account? Sign Up"}</Link>
-        </Grid>
-      </Grid>
-    </form>
+      </form>
+    </>
   );
 };
 

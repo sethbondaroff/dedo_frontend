@@ -5,9 +5,25 @@ import { Image } from "react-bootstrap";
 import solution from "../images/solution.png";
 import * as Constants from "../config/constants";
 import Map from "./Map";
+import { getUserProfile } from "../helpers/authHelpers";
+import { useNavigate } from "react-router-dom";
+
 var geolocation = require("geolocation");
 
 function SetCurrentLocation() {
+  
+  const [user, setUser] = useState(JSON.parse(getUserProfile()));
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!user || user?.type !== "DRIVER") {
+      navigate("/");
+    } else {
+      console.log("user");
+      console.log(user["type"]);
+    }
+  }, []);
+
+
   const [long, setLong] = useState("");
   const [lat, setLat] = useState("");
 
