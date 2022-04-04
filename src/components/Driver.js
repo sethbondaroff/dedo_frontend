@@ -141,7 +141,7 @@ function Driver() {
   }, []);
 
   if (deliveries.length <= 0) {
-    return <h1>No deliveries</h1>;
+    return <h1>No trips assigned to you</h1>;
   }
 
   console.log(deliveries);
@@ -150,6 +150,9 @@ function Driver() {
     deliveries.data.map((delivery) => {
       return (
         <>
+          <Typography variant="h1" align="center">
+            Trips Assigned to You:
+          </Typography>
           <br></br>
           <Card className={styles.card} elevation={0}>
             <div className={cx(styles.left, styles.moveLeft)}>

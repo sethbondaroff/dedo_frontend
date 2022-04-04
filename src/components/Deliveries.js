@@ -53,7 +53,6 @@ function Deliveries() {
               delivery.destination_user + " " + delivery.destination_address
             }
             delivery_status={delivery.status}
-            driver_name="Aadil Shaikh"
           />
         </>
       );

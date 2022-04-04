@@ -9,8 +9,7 @@ import Typography from "@mui/material/Typography";
 import { CardActionArea } from "@mui/material";
 
 function DeliveryElement(props) {
-  const { item_name, source, destination, delivery_status, driver_name } =
-    props;
+  const { item_name, source, destination, delivery_status } = props;
   return (
     <>
       <div class="content" align="center">
@@ -30,7 +29,7 @@ function DeliveryElement(props) {
                   {delivery_status}
                 </Typography>
               </Typography>
-              <Typography>Driver Name : {driver_name}</Typography>
+              {/* <Typography>Driver Name : {driver_name}</Typography> */}
             </CardContent>
             <CardActions style={{ justifyContent: "center" }}></CardActions>
           </CardActionArea>
