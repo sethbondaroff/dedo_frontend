@@ -1,0 +1,10 @@
+.map-controls{
+    width: 100%;
+    display: flex;
+}
+.map-controls .MuiTextField-root{
+    margin: 5px;
+}
+.map-container{
+    margin: 10px;
+}
