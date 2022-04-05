@@ -28,6 +28,7 @@ const Signup = () => {
           password2: confirm_password,
           type: type,
         });
+        console.log("success");
         navigate("/login");
       } catch (err) {
         console.log(err);
@@ -55,7 +56,7 @@ const Signup = () => {
       alert("All fields are required!");
     else {
       let email_validator =
-        /^[a-zA-Z0-9\-_]+@[a-zA-Z0-9]+(\.[A-Za-z]{2,3}){1,2}$/gi;
+        /^[a-zA-Z0-9\-_\.]+@[a-zA-Z0-9]+(\.[A-Za-z]{2,3}){1,2}$/gi;
 
       if (email.match(email_validator)) {
         if (password.length > 7) {
@@ -91,116 +92,116 @@ const Signup = () => {
   }
 
   return (
-    <form className="signup-container">
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <Typography variant="h4">Signup</Typography>
-          <br />
-          <br />
+    <>
+      <form className="align-center signup">
+        <Grid container spacing={2} sx={{mt:1}}>
+          <Grid item xs={12}>
+            <Typography variant="h4" sx={{mb:-1}}>Signup</Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <TextField
+              id="first_name"
+              variant="standard"
+              label="First Name"
+              value={first_name}
+              onChange={(e) => allowOnlyLetters(e)}
+              required
+              fullWidth
+            ></TextField>
+          </Grid>
+          <Grid item xs={6}>
+            <TextField
+              id="last_name"
+              variant="standard"
+              label="Last Name"
+              value={last_name}
+              onChange={(e) => allowOnlyLetters(e)}
+              required
+              fullWidth
+            ></TextField>
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              type="email"
+              variant="standard"
+              label="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              fullWidth
+            ></TextField>
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              id="username"
+              variant="standard"
+              label="Username"
+              value={username}
+              onChange={(e) => allowAlphanumeric(e)}
+              required
+              fullWidth
+            ></TextField>
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              type="password"
+              variant="standard"
+              label="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              fullWidth
+            ></TextField>
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              type={"password"}
+              variant="standard"
+              label="Confirm Password"
+              value={confirm_password}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+              fullWidth
+            ></TextField>
+          </Grid>
+          <Grid item xs={12}>
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+              value={type}
+              onChange={(e) => setType(e.target.value)}
+            >
+              <FormControlLabel
+                value="CUSTOMER"
+                control={<Radio />}
+                label="Customer"
+              />
+              <FormControlLabel
+                value="DRIVER"
+                control={<Radio />}
+                label="Driver"
+              />
+            </RadioGroup>
+          </Grid>
+          <Grid item xs={12}>
+            <Button
+              fullWidth
+              size="large"
+              variant="outlined"
+              color="primary"
+              onClick={routeChange}
+            >
+              REGISTER
+            </Button>
+          </Grid>
+          <Grid item xs={6}></Grid>
+          <Grid item xs={6}>
+            <Link href="/">{"Already have an account? Login"}</Link>
+          </Grid>
         </Grid>
-        <Grid item xs={6}>
-          <TextField
-            id="first_name"
-            variant="standard"
-            label="First Name"
-            value={first_name}
-            onChange={(e) => allowOnlyLetters(e)}
-            required
-            fullWidth
-          ></TextField>
-        </Grid>
-        <Grid item xs={6}>
-          <TextField
-            id="last_name"
-            variant="standard"
-            label="Last Name"
-            value={last_name}
-            onChange={(e) => allowOnlyLetters(e)}
-            required
-            fullWidth
-          ></TextField>
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            type="email"
-            variant="standard"
-            label="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            fullWidth
-          ></TextField>
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            id="username"
-            variant="standard"
-            label="Username"
-            value={username}
-            onChange={(e) => allowAlphanumeric(e)}
-            required
-            fullWidth
-          ></TextField>
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            type="password"
-            variant="standard"
-            label="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            fullWidth
-          ></TextField>
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            type={"password"}
-            variant="standard"
-            label="Confirm Password"
-            value={confirm_password}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-            fullWidth
-          ></TextField>
-        </Grid>
-        <Grid item xs={12}>
-          <RadioGroup
-            row
-            aria-labelledby="demo-row-radio-buttons-group-label"
-            name="row-radio-buttons-group"
-            value={type}
-            onChange={(e) => setType(e.target.value)}
-          >
-            <FormControlLabel
-              value="CUSTOMER"
-              control={<Radio />}
-              label="Customer"
-            />
-            <FormControlLabel
-              value="DRIVER"
-              control={<Radio />}
-              label="Driver"
-            />
-          </RadioGroup>
-        </Grid>
-        <Grid item xs={12}>
-          <Button
-            fullWidth
-            size="large"
-            variant="outlined"
-            color="primary"
-            onClick={routeChange}
-          >
-            REGISTER
-          </Button>
-        </Grid>
-        <Grid item xs={6}></Grid>
-        <Grid item xs={6}>
-          <Link href="/">{"Already have an account? Login"}</Link>
-        </Grid>
-      </Grid>
-    </form>
+      </form>
+    </>
   );
 };
 

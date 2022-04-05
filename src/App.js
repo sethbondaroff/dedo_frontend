@@ -39,13 +39,12 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/bookdel" element={<BookDelivery />} />
-        <Route path="/yourdel" element={<Deliveries />} />
+        <Route path="/yourdel" element={<Deliveries />} />     
         <Route path="/signup" element={<Signup />} />
         <Route path="/driver" element={<Driver />} />
         <Route path="/refresh" element={<Refresh />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/setcurrlocation" element={<SetCurrentLocation />} />
-        <Route path="/" element={<Login />} />
         <Route
           path="/map-test"
           element={

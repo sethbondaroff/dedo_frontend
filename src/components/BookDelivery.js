@@ -1,4 +1,4 @@
-import { React, useRef, useState } from "react";
+import { React, useEffect, useRef, useState } from "react";
 import {
   Button,
   Card,
@@ -16,6 +16,7 @@ import { Dropdown, DropdownButton } from "react-bootstrap";
 import { Box } from "@mui/system";
 import { useNavigate } from "react-router-dom";
 import Map from "./Map";
+import { getUserProfile } from "../helpers/authHelpers";
 
 const token = localStorage.getItem("access_token");
 
@@ -27,6 +28,17 @@ const config = {
 };
 
 const BookDelivery = () => {
+  
+  const [user, setUser] = useState(JSON.parse(getUserProfile()));
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!user || user?.type !== "CUSTOMER") {
+      navigate("/");
+    } else {
+      console.log("user");
+      console.log(user["type"]);
+    }
+  }, []);
   const source = [];
   const dest = [];
   const src_arr = [];

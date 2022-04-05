@@ -9,6 +9,8 @@ import { useVerticalRipStyles } from "@mui-treasury/styles/rip/vertical";
 import { Button, Typography } from "@mui/material";
 import axios from "axios";
 import * as Constants from "../config/constants";
+import { getUserProfile } from "../helpers/authHelpers";
+import { useNavigate } from "react-router-dom";
 
 const mainColor = "#003399";
 const lightColor = "#ecf2ff";
@@ -108,6 +110,17 @@ const useStyles = makeStyles(({ palette, breakpoints }) => ({
 }));
 
 function Driver() {
+  const [user, setUser] = useState(JSON.parse(getUserProfile()));
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!user || user?.type !== "DRIVER") {
+      navigate("/");
+    } else {
+      console.log("user");
+      console.log(user["type"]);
+    }
+  }, []);
+
   const styles = useStyles();
   const ripStyles = useVerticalRipStyles({
     size: 24,
@@ -141,7 +154,7 @@ function Driver() {
   }, []);
 
   if (deliveries.length <= 0) {
-    return <h1>No trips assigned to you</h1>;
+    return <h1 className="align-center">No deliveries</h1>;
   }
 
   console.log(deliveries);
@@ -198,12 +211,9 @@ function Driver() {
     })
   ) : (
     <>
-      <Typography>No Deliveries</Typography>
+      <h1 className="align-center">No deliveries</h1>;
     </>
   );
 }
 
 export default Driver;
-
-{
-}

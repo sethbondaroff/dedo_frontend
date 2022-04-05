@@ -23,7 +23,6 @@ const ResponsiveAppBar = () => {
 
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
-  const [showMenu, setShowMenu] = useState(true);
   const location = useLocation();
 
   const handleOpenNavMenu = (event) => {
@@ -42,14 +41,12 @@ const ResponsiveAppBar = () => {
   };
 
   useEffect(() => {
-    if (["/", "/login", "/signup"].indexOf(location?.pathname) !== -1) {
-      setShowMenu(false);
-    } else {
-      setShowMenu(true);
-    }
-  }, [location]);
+    setUser(JSON.parse(getUserProfile()));
+  }, [localStorage.getItem("profile")]);
+
   return (
-    <AppBar position="static">
+    
+    <AppBar position="sticky">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
@@ -102,57 +99,57 @@ const ResponsiveAppBar = () => {
             component="div"
             sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}
           >
-            LOGO
+            DEDO
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            <Button
+            { user?.type === "CUSTOMER" && (<Button
               onClick={handleCloseNavMenu}
               sx={{ my: 2, color: "white", display: "block" }}
               href="/bookdel"
             >
               Send a product
-            </Button>
-            <Button
+            </Button>)}
+            { user?.type === "CUSTOMER"  && (<Button
               onClick={handleCloseNavMenu}
               sx={{ my: 2, color: "white", display: "block" }}
               href="/yourdel"
             >
               Your Deliveries
-            </Button>
-            <Button
+            </Button>)}
+            {/* <Button
               onClick={handleCloseNavMenu}
               sx={{ my: 2, color: "white", display: "block" }}
               href="/"
             >
               Notifications
-            </Button>
-            <Button
+            </Button> */}
+            { user?.type === "DRIVER" && (<Button
               onClick={handleCloseNavMenu}
               sx={{ my: 2, color: "white", display: "block" }}
               href="/driver"
             >
-              Your Deliveries (Driver)
-            </Button>
-            <Button
+              Your Deliveries 
+            </Button>)} 
+            { user?.type === "DRIVER" && (<Button
               onClick={handleCloseNavMenu}
               sx={{ my: 2, color: "white", display: "block" }}
               href="/setcurrlocation"
             >
-              Set Your Current Location (Driver)
-            </Button>
+              Set Your Current Location 
+            </Button>)}
           </Box>
-          {!showMenu && (
+          {!user && (
             <Button href="/login" variant="contained">
               Login
             </Button>
           )}
           &nbsp;&nbsp;
-          {!showMenu && (
+          {!user && (
             <Button href="/signup" variant="contained">
               Signup
             </Button>
           )}
-          {showMenu && (
+          {user && (
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>

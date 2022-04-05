@@ -3,12 +3,25 @@ import DeliveryElement from "./DeliveryElement";
 import axios from "axios";
 import * as Constants from "../config/constants";
 import { Typography } from "@mui/material";
+import { getUserProfile } from "../helpers/authHelpers";
+import { useNavigate } from "react-router-dom";
+
 
 const token = localStorage.getItem("access_token");
 
 console.log(token);
 
 function Deliveries() {
+  const [user, setUser] = useState(JSON.parse(getUserProfile()));
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!user || user?.type !== "CUSTOMER") {
+      navigate("/");
+    } else {
+      console.log("user");
+      console.log(user["type"]);
+    }
+  }, []);
   const [deliveries, setDeliv] = useState([]);
   const config = {
     headers: { Authorization: `Bearer ${token}` },
@@ -37,7 +50,7 @@ function Deliveries() {
   }, []);
 
   if (deliveries.length <= 0) {
-    return <h1>No deliveries</h1>;
+    return <h1 className="align-center">No deliveries</h1>;
   }
 
   console.log(deliveries);
@@ -59,7 +72,7 @@ function Deliveries() {
     })
   ) : (
     <>
-      <Typography variant="h1">No deliveries</Typography>
+        <h1 className="align-center">No deliveries</h1>;
     </>
   );
 
