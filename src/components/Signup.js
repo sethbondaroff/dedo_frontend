@@ -28,7 +28,7 @@ const Signup = () => {
           password2: confirm_password,
           type: type,
         });
-        console.log("success");
+        console.log("Success");
         navigate("/login");
       } catch (err) {
         console.log(err);
