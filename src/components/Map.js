@@ -28,19 +28,27 @@ const Map = ({
   userLatLong = [0, 0],
   setSourceCoords = (arr) => {},
   setDestCoords = (arr) => {},
+  sourceOnly = false,
+  defaultZoom = 1,
+  defaultStreet='',
+  defaultCity='',
+  defaultProv='',
+  defaultCountry='',
+  styles={}
 }) => {
   const mapStyles = {
     height: height,
     width: width,
+    ...styles
   };
 
   const [center, setCenter] = useState(userLatLong);
-  const [zoomLevel, setZoomLevel] = useState(1);
+  const [zoomLevel, setZoomLevel] = useState(defaultZoom);
 
-  const [street, setStreet] = useState("");
-  const [city, setCity] = useState("");
-  const [prov, setProv] = useState("");
-  const [country, setCountry] = useState("");
+  const [street, setStreet] = useState(defaultStreet);
+  const [city, setCity] = useState(defaultCity);
+  const [prov, setProv] = useState(defaultProv);
+  const [country, setCountry] = useState(defaultCountry);
 
   const [markerData, setMarkerData] = useState({
     source: [],
@@ -90,11 +98,8 @@ const Map = ({
         >
           <Popup>
             <p>{markerData.center[2]}</p>
-            <Button onClick={() => updateMarkers("s")}>Set Source</Button>
-            <Button onClick={() => updateMarkers("d")}>Set Destination</Button>
-            <Button onClick={() => updateMarkers("c")}>
-              Set Current Location
-            </Button>
+            {!sourceOnly && <><Button onClick={() => updateMarkers("s")}>Set Source</Button>
+            <Button onClick={() => updateMarkers("d")}>Set Destination</Button></>}
           </Popup>
         </Marker>
       );
@@ -105,12 +110,11 @@ const Map = ({
   const searchAddress = () => {
     let searchString = "";
     searchString += street !== "" ? `&street=${street.replace(" ", "+")}` : "";
-    // searchString += city !== "" ? `&city=${city.replace(" ", "+")}` : "";
-    // searchString += prov !== "" ? `&state=${prov.replace(" ", "+")}` : "";
-    // searchString +=
-    //   country !== "" ? `&country=${country.replace(" ", "+")}` : "";
+    searchString += city !== "" ? `&city=${city.replace(" ", "+")}` : "";
+    searchString += prov !== "" ? `&state=${prov.replace(" ", "+")}` : "";
+    searchString += country !== "" ? `&country=${country.replace(" ", "+")}` : "";
 
-    searchString += "&city=Halifax&state=Nova+Scotia&country=Canada";
+    //searchString += "&city=Halifax&state=Nova+Scotia&country=Canada";
     console.log(searchString);
     const url = `https://nominatim.openstreetmap.org/search?format=jsonv2${searchString}`;
     axios
@@ -126,6 +130,9 @@ const Map = ({
         setMarkerData((prevState) => {
           return { ...prevState, center: newCenter };
         });
+        if(sourceOnly){
+          setSourceCoords(newCenter)
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -138,30 +145,12 @@ const Map = ({
       setMarkerData((prevState) => {
         return { ...prevState, center: [], source: prevState.center };
       });
-
-      localStorage.setItem(
-        "source",
-        JSON.parse(JSON.stringify(markerData.center))
-      );
-      window.location.reload(true);
     } else if (btn == "d") {
       setDestCoords(markerData.center);
       setMarkerData((prevState) => {
         return { ...prevState, center: [], dest: prevState.center };
       });
-
-      localStorage.setItem(
-        "dest",
-        JSON.parse(JSON.stringify(markerData.center))
-      );
-      window.location.reload(true);
-    } else {
-      setDestCoords(markerData.center);
-      setMarkerData((prevState) => {
-        return { ...prevState, center: [], dest: prevState.center };
-      });
-      localStorage.setItem("curr", markerData.center);
-    }
+    } 
   };
 
   const removeMarker = (btn) => {
@@ -187,17 +176,17 @@ const Map = ({
           label="House number / Street"
         />
         <TextField
-          value="Halifax"
+          value={city}
           onChange={(e) => setCity(e.target.value)}
           label="City"
         />
         <TextField
-          value="Nova Scotia"
+          value={prov}
           onChange={(e) => setProv(e.target.value)}
           label="Province / State"
         />
         <TextField
-          value="Canada"
+          value={country}
           onChange={(e) => setCountry(e.target.value)}
           label="Country"
         />
@@ -211,10 +200,10 @@ const Map = ({
         />
         {markers}
       </MapContainer>
-      {/* <div className="map-controls">
+      {!sourceOnly && <div className="map-controls">
         <Button onClick={() => updateMarkers("s")}>Set Source</Button>
         <Button onClick={() => updateMarkers("d")}>Set Destination</Button>
-      </div> */}
+      </div>}
     </div>
   );
 };
